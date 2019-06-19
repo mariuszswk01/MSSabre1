@@ -1,0 +1,86 @@
+<p>How to build Linux CentOS Virtual Machine with OpenShift for Vagrant</p>
+<p>The following tools were used during the procedure testing:</p>
+<ul>
+<li><p>Vagrant 2.0.2</p></li>
+<li><p>VirtualBox 5.2.12</p></li>
+<li><p>Windows 7 SP1</p></li>
+<li><p>CygWin</p></li>
+</ul>
+NOTE: All commands must be run from the root directory of the project, unless
+<p>otherwise stated.</p>
+<p>Use the following procedure to set up your Vagrant Virtual Machine:</p>
+<ul>
+<li>download a suitable version of Packer for your operating system from
+<pre><code>&lt;https://www.packer.io&gt;, install the Packer and add the Packer to the PATH
+system variable</code></pre></li>
+<li>upgrade Windows PowerShell, that is a part of the Windows Management
+<pre><code>Framework, to version 4.0 or higher. You can download the package from
+&lt;https://www.microsoft.com/en-us/download/details.aspx?id=40855&gt;</code></pre></li>
+<li>check out source files for the box-build project located at
+<pre><code>[git.server.com/box-build.git](git.server.com/box-build.git)</code></pre></li>
+<li>open the centos-base-variables.json file and specify credentials for the
+<pre><code>proxy server. Please note that you need to encode all non alphanumeric
+characters</code></pre></li>
+<li>make sure that all files in the project use the Unix style line endings
+<pre><code>before running any command</code></pre></li>
+<li>open CygWin environment, change directory to the folder with your project
+<pre><code>and execute the additional steps:</code></pre>
+<ul>
+<li>point ISO_URL= #, a URL to the CentOS ISO containing the installation
+<pre><code>image or virtual hard; it has to be the DVD version available from
+&lt;http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-DVD-1804.iso&gt;</code></pre></li>
+<li>use the following build command to run the Packer build:
+<pre><code>-var-file=centos-base-variables.json -force centos-base.json</code></pre></li>
+</ul></li>
+</ul>
+<blockquote>
+Note that when the packer build process is finished the centos-base.box file
+<p>is located in the current folder</p>
+</blockquote>
+<ul>
+<li>edit the centos-openshift-variables.json file and specify a proxy username
+<pre><code>and a proxy password</code></pre></li>
+<li>make sure you have the correct version of VirtualBox installed; you should
+<pre><code>have version 5.2.12 installed on your disk; it is important because Guest
+Additions are propagated to the image from your local VirtualBox</code></pre></li>
+<li>open a terminal, browse to select the folder containing your project and run
+<pre><code>the Packer build -var-file=centos-openshift-variables.json -force
+centos-openshift.json</code></pre></li>
+</ul>
+<blockquote>
+Note that when the packer build process is finished the
+<p>centos-7-openshift.box file should be located on your disk</p>
+</blockquote>
+<ul>
+<li>upload the above mentioned file to maven.repository.com. Make sure that
+<pre><code>credentials are properly configured for a server with in your
+\~/.m2/settings.xml file (id set to user-upload) and run the following
+command:</code></pre></li>
+</ul>
+<blockquote>
+<p>mvn deploy:deploy-file -DgroupId=com.example \</p>
+</blockquote>
+<blockquote>
+<p>-DartifactId=vagrant-centos-open-shift \</p>
+</blockquote>
+<blockquote>
+<p>-Dversion=1.0.7 \</p>
+</blockquote>
+<blockquote>
+<p>-Dpackaging=box \</p>
+</blockquote>
+<blockquote>
+<p>-Dfile=centos-7-openshift.box \</p>
+</blockquote>
+<blockquote>
+<p>-DrepositoryId=user-upload \</p>
+</blockquote>
+<blockquote>
+<p>-Durl=http://maven.repository.com/content/repositories/releases</p>
+</blockquote>
+<p>When the box is successfully uploaded:</p>
+<ul>
+<li><p>create a Git Tag using the deployed version number: 1.0.X</p></li>
+<li>update -Dversion command described above with 1.0.X+1 pattern to add the
+<pre><code>file to the repository</code></pre></li>
+</ul>

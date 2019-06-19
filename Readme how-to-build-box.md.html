@@ -1,0 +1,123 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Readme how-to-build-box.md</title><style></style></head><body id="preview">
+<p>How to build Linux CentOS Virtual Machine with OpenShift for Vagrant</p>
+<p>The following tools were used during the procedure testing:</p>
+<ul>
+<li>
+<p>Vagrant 2.0.2</p>
+</li>
+<li>
+<p>VirtualBox 5.2.12</p>
+</li>
+<li>
+<p>Windows 7 SP1</p>
+</li>
+<li>
+<p>CygWin</p>
+</li>
+</ul>
+<p>NOTE: All commands must be run from the root directory of the project, unless<br>
+otherwise stated.</p>
+<p>Use the following procedure to set up your Vagrant Virtual Machine:</p>
+<ul>
+<li>
+<p>download a suitable version of Packer for your operating system from<br>
+<a href="https://www.packer.io">https://www.packer.io</a>, install the Packer and add the Packer to the PATH<br>
+system variable</p>
+</li>
+<li>
+<p>upgrade Windows PowerShell, that is a part of the Windows Management<br>
+Framework, to version 4.0 or higher. You can download the package from<br>
+<a href="https://www.microsoft.com/en-us/download/details.aspx?id=40855">https://www.microsoft.com/en-us/download/details.aspx?id=40855</a></p>
+</li>
+<li>
+<p>check out source files for the box-build project located at<br>
+<a href="git.server.com/box-build.git">git.server.com/box-build.git</a></p>
+</li>
+<li>
+<p>open the centos-base-variables.json file and specify credentials for the<br>
+proxy server. Please note that you need to encode all non alphanumeric<br>
+characters</p>
+</li>
+<li>
+<p>make sure that all files in the project use the Unix style line endings<br>
+before running any command</p>
+</li>
+<li>
+<p>open CygWin environment, change directory to the folder with your project<br>
+and execute the additional steps:</p>
+<ul>
+<li>
+<p>point ISO_URL= #, a URL to the CentOS ISO containing the installation<br>
+image or virtual hard; it has to be the DVD version available from<br>
+<a href="http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-DVD-1804.iso">http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-DVD-1804.iso</a></p>
+</li>
+<li>
+<p>use the following build command to run the Packer build:<br>
+-var-file=centos-base-variables.json -force centos-base.json</p>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>Note that when the packer build process is finished the centos-base.box file<br>
+is located in the current folder</p>
+</blockquote>
+<ul>
+<li>
+<p>edit the centos-openshift-variables.json file and specify a proxy username<br>
+and a proxy password</p>
+</li>
+<li>
+<p>make sure you have the correct version of VirtualBox installed; you should<br>
+have version 5.2.12 installed on your disk; it is important because Guest<br>
+Additions are propagated to the image from your local VirtualBox</p>
+</li>
+<li>
+<p>open a terminal, browse to select the folder containing your project and run<br>
+the Packer build -var-file=centos-openshift-variables.json -force<br>
+centos-openshift.json</p>
+</li>
+</ul>
+<blockquote>
+<p>Note that when the packer build process is finished the<br>
+centos-7-openshift.box file should be located on your disk</p>
+</blockquote>
+<ul>
+<li>upload the above mentioned file to <a href="http://maven.repository.com">maven.repository.com</a>. Make sure that<br>
+credentials are properly configured for a server with in your<br>
+~/.m2/settings.xml file (id set to user-upload) and run the following<br>
+command:</li>
+</ul>
+<blockquote>
+<p>mvn deploy:deploy-file -DgroupId=com.example \</p>
+</blockquote>
+<blockquote>
+<p>-DartifactId=vagrant-centos-open-shift \</p>
+</blockquote>
+<blockquote>
+<p>-Dversion=1.0.7 \</p>
+</blockquote>
+<blockquote>
+<p>-Dpackaging=box \</p>
+</blockquote>
+<blockquote>
+<p>-Dfile=centos-7-openshift.box \</p>
+</blockquote>
+<blockquote>
+<p>-DrepositoryId=user-upload \</p>
+</blockquote>
+<blockquote>
+<p>-Durl=http://maven.repository.com/content/repositories/releases</p>
+</blockquote>
+<p>When the box is successfully uploaded:</p>
+<ul>
+<li>
+<p>create a Git Tag using the deployed version number: 1.0.X</p>
+</li>
+<li>
+<p>update -Dversion command described above with 1.0.X+1 pattern to add the<br>
+file to the repository</p>
+</li>
+</ul>
+
+</body></html>

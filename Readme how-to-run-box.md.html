@@ -1,0 +1,78 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Readme how-to-run-box.md</title><style></style></head><body id="preview">
+<p>Run procedure for Windows</p>
+<p>The following tools were used during the procedure testing:</p>
+<p>- Vagrant 2.1.1</p>
+<p>- VirtualBox 5.2.12</p>
+<p>- Windows 7 SP1</p>
+<p>- CygWin and PowerShell.</p>
+<p>NOTE: All Vagrant commands must be run from the root directory of the project.</p>
+<p>NOTE: You have to use the Vagrant release version 1.0.6; the details how to<br>
+download the mentioned release version are given below.</p>
+<p>Follow the steps below to run the procedure:</p>
+<p>- upgrade Windows PowerShell, that is a part of the Windows Management<br>
+Framework, to version 4.0 or higher. You can download the package from<br>
+<a href="https://www.microsoft.com/en-us/download/details.aspx?id=40855">https://www.microsoft.com/en-us/download/details.aspx?id=40855</a>.<br>
+It is important to upgrade it because Vagrant will not work properly with<br>
+previous versions of Windows PowerShell.</p>
+<p>- get the appropriate Vagrant installer from<br>
+<a href="https://www.vagrantup.com/downloads.html">https://www.vagrantup.com/downloads.html</a>,<br>
+install the package and add it to the PATH system variable</p>
+<p>- install Nugrant plugin to let users define .vagrantuser file at different<br>
+locations. Set http\_proxy and https\_proxy environment variables to:</p>
+<p>= export<br>
+http\_proxy=http://PROXY\_USER:PROXY\_PASSWORD\_HERE@proxy.server.com:80/</p>
+<p>= export<br>
+https\_proxy=http://PROXY\_USER:PROXY\_PASSWORD\_HERE@proxy.server.com:80/</p>
+<p>= vagrant plugin install nugrant</p>
+<p>Please note that you need to encode all non alphanumeric characters (e.g. your<br>
+password) before exporting variables. If you have encoded string add it to the<br>
+PROXY\_PASSWORD\_HERE variable.</p>
+<p>- check out source files for the box-build Git project located at<br>
+<a href="../../D:%5CTata%5CSabre%5CJson%5CPoprawione%5Cgit.server.com%5Cbox-run.git">server.com/box-run.git</a></p>
+<p>- Once both Vagrant and Nugrant are installed you can use Power Shell, Command<br>
+prompt or sticky keys to start CygWin when working with Vagrant</p>
+<p>- edit the .vagrantuser file to specify the following data: CNTLM use (details<br>
+below), limit of memory, CPUs assigned and whether additional software needs to<br>
+be installed and whether to start GUI.</p>
+<p>- Please note that if you run the software for the first time or the global<br>
+password has changed, export the environment variables: PROXY\_USER and<br>
+PROXY\_PASS. This can be done only once as proper configuration file will be<br>
+kept in the Virtual Machine (VM). You do not need to encode all non alphanumeric<br>
+characters in the password but wrap the using the double quotes.</p>
+<p>Make sure that all files in the project use the Unix style line endings before<br>
+running any command.</p>
+<p>- unset http\_proxy and https\_proxy environment variables</p>
+<p>- add a box(image) to Vagrant registry. Open terminal, browse to select the<br>
+folder containing your project and run:</p>
+<p>- vagrant box add metadata.json</p>
+<p>When the command is successfully finished you can verify if the image has been<br>
+added to Vagrant&amp;#39;s registry; use the following command to check it:</p>
+<p>vagrant box list</p>
+<p>If you already have the image in the repository and would like to replace it<br>
+with a new one, remove the existing one first using the following command:</p>
+<p>vagrant box remove centos-7-openshift.box</p>
+<p>and then run the command that adds the image (see the above command for adding<br>
+image).</p>
+<p>Please note that:</p>
+<p>- the Vagrant metadata.json file should be executed if there is no image in the<br>
+local repository or there is a new version of the image that should replace the<br>
+current version of the image.</p>
+<p>- you must have a private key located in:</p>
+<p>= ~/.ssh/id\_rsa if Cygwin is used</p>
+<p>= %USERPROFILE%\.ssh if PowerShell or Command prompt is used</p>
+<p>- if you do not have a private key generated you can use PuTTYgen.exe to<br>
+generate one. Please follow the instructions given here to generate the key:<br>
+<a href="https://www.ssh.com/ssh/putty/windows/puttygen">https://www.ssh.com/ssh/putty/windows/puttygen</a>.<br>
+It is worth mentioning that the private key should not be password-protected.<br>
+When you have the key generated save it to %USERPROFILE%\.ssh as the id\_rsa<br>
+variable. If you use CygWin copy the file to ~/.ssh.</p>
+<p>Use the following commands to:</p>
+<p>- run the Virtual Machine (if the box is successfully deployed in Vagrant<br>
+registry:</p>
+<p>= vagrant up</p>
+<p>- give you access to a shell / box (if the Virtual Machine is up and running):</p>
+<p>= vagrant ssh</p>
+<p>- stop working and shut down the running Virtual Machine:</p>
+<p>= vagrant halt</p>
+
+</body></html>
